@@ -1,0 +1,27 @@
+---
+    version: "3.3"
+
+    # Here you defines the servers and the networks to communicate with the boards
+
+    services:
+      test:
+        image: e2e_tests
+        build: e2e_tests
+        hostname: ${GTW_SERIALNUM}_e2e
+        command: bash -c "arp -s ${GTW_LANIP} ${GTW_MACADDR} && bash"
+        stdin_open: true # docker run -i
+        tty: true        # docker run -t
+        privileged: true
+        volumes:
+          - $PWD/docker-local-files/volume/${GTW_SERIALNUM}:/opt/workdir/tests/reports/:rw
+        networks:
+          - lan
+          - netio
+
+    networks:
+      lan:
+          name: e2e_tests_lan
+          external: true
+      netio:
+          name: e2e_tests_netio
+          external: true

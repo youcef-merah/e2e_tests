@@ -1,0 +1,10 @@
+requests
+pexpect
+requests
+pandas
+pytest
+pytest-timeout
+pytest-dependency
+pytest-repeat
+pytest-csv
+pytest-html

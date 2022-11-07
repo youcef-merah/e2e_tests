@@ -1,0 +1,13 @@
+#Clone the project 
+newgrp docker
+git clone --recurse-submodules git@gitlab-bbs.rmm.scom:g565427/e2e_tests.git
+cd e2e_tests
+
+# Clean permissions env
+sed -i "s/uid=1000/uid=$(id -g)/" Dockerfile
+sed -i "s/gid=1000/gid=$(id -g)/" Dockerfile
+chmod g+rw -R docker-local-files/volume/
+
+#Run containers
+docker compose -f docker-compose-srv.yml up -d
+docker compose up -d

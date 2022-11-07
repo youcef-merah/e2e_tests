@@ -1,0 +1,9 @@
+[submodule "Libraries/PowerController"]
+	path = src/Libraries/PowerController
+	url = git@gitlab-bbs.rmm.scom:g565427/PowerController
+[submodule "Libraries/TR69Manager"]
+	path = src/Libraries/TR69Manager
+	url = git@gitlab-bbs.rmm.scom:g565427/TR69Manager
+[submodule "Libraries/patterns"]
+	path = src/Libraries/patterns
+	url = git@gitlab-bbs.rmm.scom:g565427/patterns
