@@ -1,8 +1,6 @@
 ---
     version: "3.3"
 
-    # Here you defines the servers and the networks to communicate with the boards
-
     services:
       test:
         image: e2e_tests
@@ -15,13 +13,16 @@
         volumes:
           - $PWD/docker-local-files/volume/${GTW_SERIALNUM}:/opt/workdir/tests/reports/:rw
         networks:
-          - lan
+          - ${GTW_NETWORK}
           - netio
 
     networks:
-      lan:
-          name: e2e_tests_lan
+      gtw-lan0:
+          name: gtw-lan0
+          external: true
+      gtw-lan1:
+          name: gtw-lan1
           external: true
       netio:
-          name: e2e_tests_netio
+          name: netio
           external: true

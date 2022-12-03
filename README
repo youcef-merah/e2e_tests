@@ -8,6 +8,35 @@ sed -i "s/uid=1000/uid=$(id -g)/" Dockerfile
 sed -i "s/gid=1000/gid=$(id -g)/" Dockerfile
 chmod g+rw -R docker-local-files/volume/
 
-#Run containers
-docker compose -f docker-compose-srv.yml up -d
+# Create networks
+
+PARENT_IFACE=eth2
+sudo ./docker-local-files/setup-macvlans.sh ${PARENT_IFACE} add
+
+docker network create -d macvlan \
+    --subnet=192.168.0.0/24 \
+    --gateway=192.168.0.1 \
+    -o parent=${PARENT_IFACE}.1  \
+    -o macvlan_mode=bridge gtw-lan0
+
+docker network create -d macvlan \
+    --subnet=192.168.1.0/24 \
+    --gateway=192.168.1.1 \
+    -o parent=${PARENT_IFACE}.2  \
+    -o macvlan_mode=bridge gtw-lan1 
+
+docker network create -d macvlan \
+    --subnet=192.168.2.0/24 \
+    --gateway=192.168.2.78 \
+    -o parent=${PARENT_IFACE}.3  \
+    -o macvlan_mode=bridge netio
+
+
+# Run containers
+. config/<file>
 docker compose up -d
+
+
+# Run test
+docker attach <container-id>
+pytest 
