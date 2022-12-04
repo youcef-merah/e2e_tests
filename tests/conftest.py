@@ -1,10 +1,9 @@
 import pytest
 import pandas
 
-from threading import *
 from typing import Dict, Tuple
 
-from src.Services.ConnectionManager import ConnectionManager
+from src.Services.ServiceFactory import *
 from src.Libraries.PowerController.PowerController import *
 from src.Libraries.TR69Manager.TR69Manager import *
 
@@ -26,14 +25,12 @@ def tr69_mgr():
 
 @pytest.fixture()
 def cm_lan():
-  cm = ConnectionManager(host_ip='192.168.0.1', host_port=80)
-  Thread(target=cm.run, daemon=True).start()
+  cm = ConnectionManagerFactory().createService(host_ip='192.168.0.1', host_port=80)
   return cm
 
 @pytest.fixture()
 def cm_wan_acs():
-  cm = ConnectionManager(host_ip='192.168.27.15', host_port=7557)
-  Thread(target=cm.run, daemon=True).start()
+  cm = ConnectionManagerFactory().createService(host_ip='192.168.27.15', host_port=7557)
   return cm
 
 def pytest_csv_written(csv_path):
@@ -87,7 +84,6 @@ def pytest_runtest_makereport(item, call):
             _test_failed_incremental.setdefault(cls_name, {}).setdefault(
                 parametrize_index, test_name
             )
-
 
 def pytest_runtest_setup(item):
     if "incremental" in item.keywords:
