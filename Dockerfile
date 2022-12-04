@@ -46,7 +46,8 @@ RUN groupadd -r -g ${docker_gid} docker
 
 #Install E2E_tests
 RUN install -o ${username} -g ${docker_gid} -m 755 -d /opt/workdir
-COPY --chown=${username}}:${docker_gid} . /opt/workdir
+COPY --chown=${username}}:${docker_gid} src /opt/workdir
+COPY --chown=${username}}:${docker_gid} tests /opt/workdir
 
 USER ${username}
 RUN chmod g+rw -R /opt/workdir
