@@ -10,7 +10,7 @@ class ConnectionManager(IService):
 
   def __init__(self, host_ip='192.168.0.1', host_port=80):
     super(IService, self).__init__()
-    self.__state: ConnectionState = ConnectionClosed()
+    self.__state: ConnectionState = ConnectionIdle()
     self.__host_ip = host_ip
     self.__host_port = host_port
 
@@ -36,6 +36,7 @@ class ConnectionManager(IService):
     self.getState().inspectConnection(self)
 
   def run(self):
+    self.setState(ConnectionClosed)
     while True:
       time.sleep(1)
       if self.getState() == ConnectionClosed():
@@ -51,6 +52,14 @@ class ConnectionState():
   @abstractmethod
   def inspectConnection(self, cm: ConnectionManager):
     raise NotImplementedError("MUST be implemented")
+
+class ConnectionIdle(ConnectionState, Singleton):
+
+  def __init__(self):
+    super(Singleton, self).__init__()
+
+  def __str__(self):
+    return 'connection idle'
 
 class ConnectionOpened(ConnectionState, Singleton):
 
